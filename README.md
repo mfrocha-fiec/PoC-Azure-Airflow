@@ -10,3 +10,5 @@ Temos três possíveis opções de ambiente:
 O plano inicial é usar o Azure SDK Python para disparar as tasks no ASASP.
 
 Há um [tutorial](https://docs.microsoft.com/en-us/azure/synapse-analytics/spark/vscode-tool-synapse#open-a-work-folder) de como attachar o cluster no VSCode para executar códigos diretamente no cluster remoto. 
+
+A extensão foi descontinuada. 
