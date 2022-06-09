@@ -29,4 +29,8 @@ Isso gerará um ```client id```, ```tenant id``` e ```client secret```.
 
 Com isso, pode-se usar o tutorial [neste link](https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/synapse/azure-synapse/samples/sample.py) para criar uma classe que lidará com a autenticação, listar, criar e deletar Jobs no ASASP.
 
+Para submeter um Job, precisamos de um arquivo de definição do Job, que é o script .py que executará a tarefa. Um dos problemas é que esse arquivo de definição *precisa* estar no Blob Storage. O problema é que fica mais difícil versionar esse arquivo.
+
+![image](https://user-images.githubusercontent.com/83727621/172836606-2c1d2c61-485e-43e6-b80f-4116773e6a76.png)
+
 ### Usando o SDK com Airflow no AKS:
