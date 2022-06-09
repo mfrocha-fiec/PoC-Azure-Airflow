@@ -33,4 +33,6 @@ Para submeter um Job, precisamos de um arquivo de definição do Job, que é o s
 
 ![image](https://user-images.githubusercontent.com/83727621/172836606-2c1d2c61-485e-43e6-b80f-4116773e6a76.png)
 
+Uma das possíveis soluções é criar um gatilho que copiará o .py do local onde ele está no git e subirá no Blob Storage no momento da execução.
+
 ### Usando o SDK com Airflow no AKS:
