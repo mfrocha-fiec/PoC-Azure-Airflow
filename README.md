@@ -20,4 +20,8 @@ O fluxo consiste em criar a task em um arquivo .py e salvar no ADLS Gen 2.
 
 A task do Python chamará um script helper para executar um batch job spark usando o cluster synapse. O arquivo .py será passado no argumento dessa função.
 
+O primeiro passo é a criação de um registro para Apps on premises na azure:
+https://docs.microsoft.com/en-us/azure/developer/python/sdk/authentication-on-premises-apps?tabs=azure-portal
+Isso gerará um ```client id```, ```tenant id``` e ```client secret```.
+
 ### Usando o SDK com Airflow no AKS:
