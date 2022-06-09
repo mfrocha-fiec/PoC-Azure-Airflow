@@ -14,5 +14,10 @@ Há um [tutorial](https://docs.microsoft.com/en-us/azure/synapse-analytics/spark
 A extensão foi descontinuada. 
 
 ### Usando o SDK com Airflow local:
+Foi criada uma cópia do Airflow do Chico 3.0 com uma dag "teste_azure".
+
+O fluxo consiste em criar a task em um arquivo .py e salvar no ADLS Gen 2.
+
+A task do Python chamará um script helper para executar um batch job spark usando o cluster synapse. O arquivo .py será passado no argumento dessa função.
 
 ### Usando o SDK com Airflow no AKS:
