@@ -25,4 +25,8 @@ https://docs.microsoft.com/en-us/azure/developer/python/sdk/authentication-on-pr
 
 Isso gerará um ```client id```, ```tenant id``` e ```client secret```.
 
+É necessário instalar os pacotes ```azure-identity``` e ```azure-synapse```.
+
+Com isso, pode-se usar o tutorial [neste link](https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/synapse/azure-synapse/samples/sample.py) para criar uma classe que lidará com a autenticação, listar, criar e deletar Jobs no ASASP.
+
 ### Usando o SDK com Airflow no AKS:
