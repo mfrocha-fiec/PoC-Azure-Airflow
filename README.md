@@ -37,4 +37,6 @@ Uma das possíveis soluções é criar um gatilho que copiará o .py do local on
 
 ![image](https://user-images.githubusercontent.com/83727621/172838382-e0312384-501a-4daa-877f-abd1eb044f55.png)
 
+O primeiro script da ETL de teste é o ```extract.py``` que vai baixar o arquivo .csv da rede e salvar no ADLS Gen 2. Para isso é necessário ter uma ```Azure Storage connection string```, obtida através [desse tutorial](https://docs.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string).
+
 ### Usando o SDK com Airflow no AKS:
