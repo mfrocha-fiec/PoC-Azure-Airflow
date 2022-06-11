@@ -27,7 +27,7 @@ A solução paliativa encontrada para evitar problemas de permissão é adiciona
 ### Configuração do ambiente airflow
 
 Foi criada uma cópia do Airflow do Chico 3.0 com uma dag "teste_azure".
-É necessário instalar os pacotes ```azure-identity``` e ```azure-synapse```.
+É necessário instalar os pacotes ```azure-identity```, ```azure-synapse```, ```adlfs``` e a extensão do Airflow ```apache-airflow-providers-microsoft-azure```.
 
 ### Fluxo de extração
 
