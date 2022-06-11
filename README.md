@@ -29,26 +29,22 @@ A solução paliativa encontrada para evitar problemas de permissão é adiciona
 Foi criada uma cópia do Airflow do Chico 3.0 com uma dag "teste_azure".
 É necessário instalar os pacotes ```azure-identity```, ```azure-synapse```, ```adlfs``` e a extensão do Airflow ```apache-airflow-providers-microsoft-azure```.
 
-### Fluxo de extração
+### Fluxo de mockup
 
-O fluxo consiste em criar a task em um arquivo .py e salvar no ADLS Gen 2.
+O fluxo consiste em baixar um arquivo .csv da internet, transformar ele em .parquet no Spark Pool e salvar na camada RAW.
 
-A task do Python chamará um script helper para executar um batch job spark usando o cluster synapse. O arquivo .py será passado no argumento dessa função.
+### Extração
+
+É feito o download de um .csv no github para um DataFrame Pandas.
 
 
 
-
-
-Com isso, pode-se usar o tutorial [neste link](https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/synapse/azure-synapse/samples/sample.py) para criar uma classe que lidará com a autenticação, listar, criar e deletar Jobs no ASASP.
+### Limitações 
 
 Para submeter um Job, precisamos de um arquivo de definição do Job, que é o script .py que executará a tarefa. Um dos problemas é que esse arquivo de definição *precisa* estar no Blob Storage. O problema é que fica mais difícil versionar esse arquivo.
-
-![image](https://user-images.githubusercontent.com/83727621/172836606-2c1d2c61-485e-43e6-b80f-4116773e6a76.png)
 
 Uma das possíveis soluções é criar um gatilho que copiará o .py do local onde ele está no git e subirá no Blob Storage no momento da execução. Uma ideia de como fazer isso foi discutida [nessa thread](https://stackoverflow.com/questions/68234041/azure-devops-ci-cd-pipelines-for-adls-gen2-resource).
 
 ![image](https://user-images.githubusercontent.com/83727621/172838382-e0312384-501a-4daa-877f-abd1eb044f55.png)
-
-O primeiro script da ETL de teste é o ```extract.py``` que vai baixar o arquivo .csv da rede e salvar no ADLS Gen 2. Para isso é necessário ter uma ```Azure Storage connection string```, obtida através [desse tutorial](https://docs.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string).
 
 ### Usando o SDK com Airflow no AKS:
