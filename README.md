@@ -149,6 +149,7 @@ options_list = {
 ```
 Onde o argumento ```file``` se refere ao script .py da transformação que deve estar no Storage, sendo ele Gen1 ou Gen2.
 
+A função também checa o estado da execução do Job no cluster, para retornar ao Airflow se houve erros ou não.
 
 ### Limitações 
 
