@@ -35,8 +35,119 @@ O fluxo consiste em baixar um arquivo .csv da internet, transformar ele em .parq
 
 ### Extração
 
-É feito o download de um .csv no github para um DataFrame Pandas.
+É feito o download de um .csv no github em memória. É feito o upload desse arquivo para o Storage Account, no container ```landing```.
 
+```
+def extract(dag_name):
+    storage_account_name = 'pocairflow'
+
+    initialize_storage_account_ad(storage_account_name)
+    
+    url = r'https://code.datasciencedojo.com/datasciencedojo/datasets/raw/master/Accidental%20Drug%20Related%20Deaths%20in%20Connecticut,%20US/Accidental%20Drug%20Related%20Deaths%20in%20Connecticut-2012-2018.csv'
+
+    file_system = 'landing'
+    path_directory=f'/{dag_name}'
+
+    request = requests.get(url)
+
+    file_system_client = service_client.get_file_system_client(file_system=file_system)
+
+    directory_client = get_directory_client_or_create(file_system_client, path_directory)    
+    
+    file_client = directory_client.create_file("drug-data-2012-2018.csv")
+
+    file_contents = request.content
+
+    file_client.append_data(data=file_contents, offset=0, length=len(file_contents))
+    file_client.flush_data(len(file_contents))
+```
+
+### Transformação
+
+A transformação é bem simples, apenas lê o .csv com PySpark e salva na camada ```raw``` como Parquet.
+
+transform_raw.py:
+```
+import sys
+ 
+from pyspark import SparkContext, SparkConf
+from pyspark.sql import SparkSession
+
+if __name__ == "__main__":
+	
+	# create Spark context with necessary configuration
+	conf = SparkConf().setAppName("transform-raw-nb1").set("spark.hadoop.validateOutputSpecs", "false")
+	spark = SparkSession.builder.config(conf=conf) \
+        .appName('so')\
+        .getOrCreate()	
+
+	source_path = "abfss://landing@pocairflow.dfs.core.windows.net/teste_azure/drug-data-2012-2018.csv"
+	target_path = "abfss://raw@pocairflow.dfs.core.windows.net/teste_azure/drug-data-2012-2018.parquet"
+
+	df = spark.read.option("header","true").csv(source_path) 
+
+	df.write.format("parquet").mode("overwrite").save(target_path)
+```
+Foi criado um wrapper pra encapsular o método da Azure para submeter o Job Spark, tornando mais harmônico com o fluxo do Airflow.
+
+synapse_tools.py
+```
+from azure.synapse.spark import SparkClient
+from azure.synapse.spark.models import SparkBatchJobOptions, SparkSessionOptions, SparkStatementOptions
+from azure.identity import DefaultAzureCredential
+from time import sleep
+
+def submit_spark_job_synapse(options_dict:dict):
+    token_credential = DefaultAzureCredential()
+    endpoint = 'https://pocairflow.dev.azuresynapse.net'
+
+    spark_pool_name = 'pocairflow'
+
+    spark_client = SparkClient(token_credential, endpoint, spark_pool_name)
+
+    options = SparkBatchJobOptions.from_dict(options_dict)
+
+    job = spark_client.spark_batch.create_spark_batch_job(options, detailed=True)
+    job_id = job.id
+
+    not_finished = True
+
+    while not_finished:
+        job_update = spark_client.spark_batch.get_spark_batch_job(job_id)
+        if job_update.state in ['running', 'not_started']:
+            sleep(30)
+            pass
+        elif job_update.state == 'success':
+            not_finished = False
+        elif job_update.state == 'failed':
+            raise "The job runned with problems. Check in Azure Portal."
+        else:
+            sleep(30)
+```
+Essa função pega as credenciais do App Azure diretamente das variáveis de ambiente, sendo elas: ```AZURE_SUBSCRIPTION_ID```, ```AZURE_TENANT_ID```, ```AZURE_CLIENT_ID``` e ```AZURE_CLIENT_SECRET```.
+
+A função cria o Job no cluster, sendo configurado através do input ```options_dict```. Um exemplo de como é esse dict:
+
+```
+options_list = {
+    "tags": None,
+    "artifactId": None,
+    "name": f"transform_raw",
+    "file": f'abfss://scripts@pocairflow.dfs.core.windows.net/{dag_name}/transform_raw.py',
+    "className": None,
+    "args": None,
+    "jars": [],
+    "files": [],
+    "archives": [],
+    "conf": None,
+    "driverMemory": "4g",
+    "driverCores": 4,
+    "executorMemory": "2g",
+    "executorCores": 2,
+    "numExecutors": 2,
+}
+```
+Onde o argumento ```file``` se refere ao script .py da transformação que deve estar no Storage, sendo ele Gen1 ou Gen2.
 
 
 ### Limitações 
