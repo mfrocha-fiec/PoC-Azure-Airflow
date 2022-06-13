@@ -9,9 +9,9 @@ Temos três possíveis opções de ambiente:
 ## Opção 1: Azure Synapse Analytics Spark Pool (ASASP)
 O plano inicial é usar o Azure SDK Python para disparar as tasks no ASASP.
 
-Há um [tutorial](https://docs.microsoft.com/en-us/azure/synapse-analytics/spark/vscode-tool-synapse#open-a-work-folder) de como attachar o cluster no VSCode para executar códigos diretamente no cluster remoto. 
+### Map da solução:
 
-A extensão foi descontinuada. 
+![fluxo_synapse drawio](https://user-images.githubusercontent.com/83727621/173453770-ddd58511-0817-4f5e-9e97-1afc908f064e.png)
 
 ### Usando o SDK com Airflow local:
 
