@@ -159,4 +159,6 @@ Uma das possíveis soluções é criar um gatilho que copiará o .py do local on
 
 ![image](https://user-images.githubusercontent.com/83727621/172838382-e0312384-501a-4daa-877f-abd1eb044f55.png)
 
-### Usando o SDK com Airflow no AKS:
+## Opção 2: Azure Databricks
+
+
