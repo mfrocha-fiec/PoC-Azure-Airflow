@@ -174,7 +174,8 @@ O tutorial é bem simples, mas de forma resumida, o pacote "builda" um projeto p
 
 A vantagem é que essa forma de deploy não requer que o script de execução esteja no Gen 2.
 
-### Usando os hooks e operators do Airflow
+### Usando os hooks e operators do Airflow (API)
+
 
 
 
