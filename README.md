@@ -192,6 +192,56 @@ A extensão Databricks para Airflow conta com vários operadores para realizar d
 
 O operador utilizado no PoC é o ```DatabricksSubmitRunOperator```, que permite executar uma task Spark através de diversos meios, incluindo um script ```.py```, o mais relevante no caso da utilização com o Airflow.
 
+```
+"""
+This is an example DAG which uses the DatabricksSubmitRunOperator.
+In this example, we create two tasks which execute sequentially.
+The first task is to run a notebook at the workspace path "/test"
+and the second task is to run a JAR uploaded to DBFS. Both,
+tasks use new clusters.
+Because we have set a downstream dependency on the notebook task,
+the spark jar task will NOT run until the notebook task completes
+successfully.
+The definition of a successful run is if the run has a result_state of "SUCCESS".
+For more information about the state of a run refer to
+https://docs.databricks.com/api/latest/jobs.html#runstate
+"""
 
+from airflow import DAG
+from airflow.providers.databricks.operators.databricks import DatabricksSubmitRunOperator
+from airflow.utils.dates import days_ago
 
+default_args = {
+    'owner': 'airflow',
+    'email': ['airflow@example.com'],
+    'depends_on_past': False,
+}
+
+with DAG(
+    dag_id='example_databricks_operator',
+    default_args=default_args,
+    schedule_interval='@daily',
+    start_date=days_ago(2),
+    tags=['example'],
+) as dag:
+
+    notebook_task = DatabricksSubmitRunOperator(
+        task_id='notebook_task', 
+        databricks_conn_id='pocairflow', 
+        existing_cluster_id='0613-234547-x33igqjf', 
+        notebook_task={'notebook_path':'/Users/mfrocha@sfiec.org.br/dbx-demo-job'}
+    )
+    python_task = DatabricksSubmitRunOperator(
+        task_id='python_task', 
+        databricks_conn_id='pocairflow', 
+        existing_cluster_id='0613-234547-x33igqjf', 
+        spark_python_task={'python_file':'dbfs:/FileStore/scripts/dbx_demo_job.py'}
+    )
+
+    notebook_task
+    python_task
+
+```
+
+Os problemas dessa forma de submeter a task são que nem o notebook nem o script conseguem ser extraídos diretamente do Repo configurado no Databricks. 
 
