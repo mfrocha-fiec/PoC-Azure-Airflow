@@ -243,5 +243,7 @@ with DAG(
 
 ```
 
-Os problemas dessa forma de submeter a task são que nem o notebook nem o script conseguem ser extraídos diretamente do Repo configurado no Databricks. 
+Os problemas dessa forma de submeter a task são que nem o notebook nem o script conseguem ser extraídos diretamente do Repo configurado no Databricks. Essa funcionalidade da API está atualmente (14/06/2022) em Public Preview, ou seja, poderá ser suportada no futuro.
+
+
 
