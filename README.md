@@ -161,4 +161,20 @@ Uma das possíveis soluções é criar um gatilho que copiará o .py do local on
 
 ## Opção 2: Azure Databricks
 
+É feita a criação do cluster Databricks. A observação a ser feita é que não tinha opções de criar o cluster nas regiões mais comuns (EUA, Brazil).
+As instãncias são de VMs da Azure, então tendem a ser caras (atualmente usando uma de U$ 250).
+
+### Usando o pacote ```dbx```
+
+A primeira opção é utilizando o pacote ```dbx```, que de acordo com os tutoriais da azure, é o que será mantido de agora em diante. [Este tutorial](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/dbx#code-example) explica como criar um job básico utilizando essa ferramenta.
+
+O tutorial é bem simples, mas de forma resumida, o pacote "builda" um projeto para o Databricks. Fica uma solução esquisita, já que é necessário ter vários diretórios e arquivos de configuração para rodar apenas um Job.
+
+![image](https://user-images.githubusercontent.com/83727621/173466283-a52dd3a8-2e09-4216-bcc6-67e429075aa0.png)
+
+A vantagem é que essa forma de deploy não requer que o script de execução esteja no Gen 2.
+
+### Usando os hooks e operators do Airflow
+
+
 
