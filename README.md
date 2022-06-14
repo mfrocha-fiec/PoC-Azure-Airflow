@@ -164,7 +164,12 @@ Uma das possíveis soluções é criar um gatilho que copiará o .py do local on
 É feita a criação do cluster Databricks. A observação a ser feita é que não tinha opções de criar o cluster nas regiões mais comuns (EUA, Brazil).
 As instãncias são de VMs da Azure, então tendem a ser caras (atualmente usando uma de U$ 250).
 
-### 2.1 Usando o pacote ```dbx```
+### 2.1 Map da solução
+
+![fluxo_databricks drawio](https://user-images.githubusercontent.com/83727621/173565486-81c3243d-01cb-465b-8985-84445ed3260f.png)
+
+
+### 2.2 Usando o pacote ```dbx```
 
 A primeira opção é utilizando o pacote ```dbx```, que de acordo com os tutoriais da azure, é o que será mantido de agora em diante. [Este tutorial](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/dbx#code-example) explica como criar um job básico utilizando essa ferramenta.
 
@@ -174,11 +179,11 @@ O tutorial é bem simples, mas de forma resumida, o pacote "builda" um projeto p
 
 A vantagem é que essa forma de deploy não requer que o script de execução esteja no Gen 2. A desvantagem é que dificulta a implantação em um fluxo de trabalho.
 
-### 2.2 Usando os hooks e operators do Airflow (API)
+### 2.3 Usando os hooks e operators do Airflow (API)
 
 O Airflow já conta com algumas integrações com o Databricks. O pacote ```apache-airflow-providers-databricks``` foi baseado na [API do Databricks](https://docs.databricks.com/dev-tools/api/index.html).
 
-#### 2.2.1 Configurando conexão
+#### 2.3.1 Configurando conexão
 
 A conexão na interface do Airflow terá os seguintes campos: 
 ![image](https://user-images.githubusercontent.com/83727621/173550561-c464716d-2dcf-411a-87ba-0c34a62b4a48.png)
@@ -186,7 +191,7 @@ A conexão na interface do Airflow terá os seguintes campos:
 O Host é obtido da URL que se acessa no studio Databricks.
 A autenticação pode ser feita por AAD ou por PAT (Personal Access Token). O método mais fácil é com o PAT. Um tutorial de como obter o PAT no Databricks pode ser encontrado [aqui](https://docs.databricks.com/dev-tools/api/latest/authentication.html).
 
-#### 2.2.2 Usando o DatabricksSubmitRunOperator
+#### 2.3.2 Usando o DatabricksSubmitRunOperator
 
 A extensão Databricks para Airflow conta com vários operadores para realizar diversas tasks administrativas no cluster. Este [link](https://airflow.apache.org/docs/apache-airflow-providers-databricks/stable/operators/index.html) contém uma lista completa do que cada operador faz.
 
@@ -244,6 +249,4 @@ with DAG(
 ```
 
 Os problemas dessa forma de submeter a task são que nem o notebook nem o script conseguem ser extraídos diretamente do Repo configurado no Databricks. Essa funcionalidade da API está atualmente (14/06/2022) em Public Preview, ou seja, poderá ser suportada no futuro.
-
-
 
